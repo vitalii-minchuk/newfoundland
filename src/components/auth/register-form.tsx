@@ -4,7 +4,7 @@ import React, { useState, useTransition } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { LoginSchema, TLoginInput } from '@/schemas'
+import { RegisterSchema, TRegisterInput } from '@/schemas'
 import { CardWrapper } from '@/components/auth/card-wrapper'
 import {
     Form,
@@ -20,17 +20,18 @@ import { FormError } from '@/components/auth/form-error'
 import { FormSuccess } from '@/components/auth/form-success'
 import { login } from '@/actions/login-action'
 
-export const LoginForm = () => {
+export const RegisterForm = () => {
     const [success, setSuccess] = useState(false)
     const [error, setError] = useState(false)
     const [message, setMessage] = useState('')
     const [isPending, startTransition] = useTransition()
 
-    const form = useForm<TLoginInput>({
-        resolver: zodResolver(LoginSchema),
+    const form = useForm<TRegisterInput>({
+        resolver: zodResolver(RegisterSchema),
         defaultValues: {
             email: '',
             password: '',
+            name: '',
         }
     })
 
@@ -40,7 +41,7 @@ export const LoginForm = () => {
         setMessage('')
     }
 
-    const onSubmit: SubmitHandler<TLoginInput> = (data) => {
+    const onSubmit: SubmitHandler<TRegisterInput> = (data) => {
         resetState()
         
         startTransition(async () => {
@@ -55,9 +56,9 @@ export const LoginForm = () => {
 
     return (
         <CardWrapper
-            backBtnLabel={`Don't have an account?`}
-            backBtnHref='/auth/register'
-            headerLabel='Welcome back'
+            backBtnLabel='Already have an account?'
+            backBtnHref='/auth/login'
+            headerLabel='Create an account'
             showSocials
         >
             <Form {...form}>
@@ -79,6 +80,19 @@ export const LoginForm = () => {
                                     {...field}
                                     type='password'
                                     placeholder='******'
+                                    disabled={isPending}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}/>
+                    <FormField control={form.control} name='name' render={({field}) => (
+                        <FormItem>
+                            <FormLabel className='text-xs'>Name</FormLabel>
+                            <FormControl>
+                                <Input
+                                    {...field}
+                                    type='text'
                                     disabled={isPending}
                                 />
                             </FormControl>
