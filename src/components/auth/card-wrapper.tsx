@@ -2,8 +2,9 @@ import React from 'react'
 import { Poppins } from 'next/font/google'
 
 import { cn } from '@/lib/utils'
-import { Card, CardContent, CardHeader, CardFooter } from '../ui/card'
-import { Socials } from './socials'
+import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card'
+import { Socials } from '@/components/auth/socials'
+import { BackBtn } from '@/components/auth/back-btn'
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -40,6 +41,9 @@ export const CardWrapper = (props: Props) => {
           <Socials />
         </CardFooter>
       )}
+          <CardFooter>
+      <BackBtn href={backBtnHref} label={backBtnLabel} />
+      </CardFooter>
     </Card>
   )
 }
