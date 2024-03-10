@@ -18,7 +18,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { FormError } from '@/components/auth/form-error'
 import { FormSuccess } from '@/components/auth/form-success'
-import { login } from '@/actions/login-action'
+import { register } from '@/actions/register-action'
 
 export const RegisterForm = () => {
     const [success, setSuccess] = useState(false)
@@ -45,7 +45,7 @@ export const RegisterForm = () => {
         resetState()
         
         startTransition(async () => {
-            const res = await login(data)
+            const res = await register(data)
 
             if (res?.error) setError(true)
             if (res?.success) setSuccess(true)
@@ -63,6 +63,19 @@ export const RegisterForm = () => {
         >
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+                    <FormField control={form.control} name='name' render={({field}) => (
+                        <FormItem>
+                            <FormLabel className='text-xs'>Name</FormLabel>
+                            <FormControl>
+                                <Input
+                                    {...field}
+                                    type='text'
+                                    disabled={isPending}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}/>
                     <FormField control={form.control} name='email' render={({field}) => (
                         <FormItem>
                             <FormLabel className='text-xs'>Email</FormLabel>
@@ -80,19 +93,6 @@ export const RegisterForm = () => {
                                     {...field}
                                     type='password'
                                     placeholder='******'
-                                    disabled={isPending}
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}/>
-                    <FormField control={form.control} name='name' render={({field}) => (
-                        <FormItem>
-                            <FormLabel className='text-xs'>Name</FormLabel>
-                            <FormControl>
-                                <Input
-                                    {...field}
-                                    type='text'
                                     disabled={isPending}
                                 />
                             </FormControl>
