@@ -49,7 +49,7 @@ export const LoginForm = () => {
             if (res?.error) setError(true)
             if (res?.success) setSuccess(true)
 
-            setMessage(res.message)
+            setMessage(res?.message)
         })
     }
 
