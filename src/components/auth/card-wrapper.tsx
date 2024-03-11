@@ -27,6 +27,7 @@ export const CardWrapper = (props: Props) => {
     backBtnLabel,
     headerLabel
   } = props
+
   return (
     <Card className=' w-[320px]'>
       <CardHeader>
