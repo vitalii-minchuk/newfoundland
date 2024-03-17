@@ -14,7 +14,7 @@ export const FormError = (props: Props) => {
         <div className='flex gap-2 bg-destructive/15 text-destructive rounded-md p-2.5'>
             <BsExclamationTriangle className='h-4 w-4' />
             <p className='text-xs'>
-            {message}
+                {message}
             </p>
         </div>
     )

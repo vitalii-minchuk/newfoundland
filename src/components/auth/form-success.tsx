@@ -14,7 +14,7 @@ export const FormSuccess = (props: Props) => {
         <div className='flex gap-2 bg-emerald-500/15 text-emerald-500 rounded-md p-2.5'>
             <IoIosCheckmarkCircleOutline className='h-4 w-4' />
             <p className='text-xs'>
-            {message}
+                {message}
             </p>
         </div>
     )
