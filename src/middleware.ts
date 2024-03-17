@@ -18,7 +18,22 @@ export default auth((req) => {
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
-  if (isApiAuthRoute) return
+  if (isAuthRoute) return
+
+  // TODO fix bug with redirect double "auth"
+  // check later if its fixed and remove
+  if (isApiAuthRoute) {
+    if (
+      nextUrl.pathname === '/api/auth/auth/login' &&
+      nextUrl.searchParams.get('error')
+    ) {
+      return Response.redirect(
+        new URL(`/auth/error`, nextUrl.origin),
+      );
+    }
+
+    return;
+  }
 
   if (isAuthRoute && isLoggedIn) {
       return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl))
@@ -39,5 +54,5 @@ export default auth((req) => {
 // Optionally, don't invoke Middleware on some paths
 // Read more: https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
 export const config = {
-    matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
-  }
+  matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
+}
