@@ -29,15 +29,17 @@ export const {
     },
   },
   callbacks: {
-    // async signIn({user}) {
-    //   if (!user?.id) return false
+    async signIn({user, account}) {
+      if (account?.provider !== 'credentials') return true
+      
+      if (!user?.id) return false
 
-    //   const existingUser = await getUserById(user.id)
+      const existingUser = await getUserById(user.id)
 
-    //   if (!existingUser || !existingUser.emailVerified) return false
+      if (!existingUser?.emailVerified) return false
 
-    //   return true
-    // },
+      return true
+    },
     async session({session, token}) {
       if (token?.sub && session?.user) {
         session.user.id = token.sub
