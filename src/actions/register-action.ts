@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs'
 import { RegisterSchema, TRegisterInput } from "@/schemas"
 import { prismaDB } from '@/lib/db'
 import { getUserByEmail } from '@/helpers/user'
+import { generateVerificationToken } from '@/helpers/verification-token'
 
 export const register = async (input: TRegisterInput) => {
     const validatedData = RegisterSchema.safeParse(input)
@@ -24,12 +25,14 @@ export const register = async (input: TRegisterInput) => {
     const hashedPassword = await bcrypt.hash(password, 10)
 
     await prismaDB.user.create({
-        data: {
-            email,
-            name,
-            password: hashedPassword,
-        }
-    })
+            data: {
+                email,
+                name,
+                password: hashedPassword,
+            }
+        })
 
-    return {success: true, message: 'Ussr created'}
+    const verificationToken = await generateVerificationToken(email)
+  
+    return {success: true, message: 'Confirmation email sent'}
 }
