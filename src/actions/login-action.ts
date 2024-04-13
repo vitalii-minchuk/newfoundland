@@ -1,13 +1,15 @@
 "use server"
 
 import * as zod from 'zod'
+import { signIn } from '@/auth'
+import { AuthError } from 'next-auth'
 
 import { LoginSchema, TLoginInput } from "@/schemas"
 import { DEFAULT_LOGIN_REDIRECT } from '@/routes'
-import { signIn } from '@/auth'
-import { AuthError } from 'next-auth'
 import { getUserByEmail } from '@/helpers/user'
 import { generateVerificationToken } from '@/helpers/verification-token'
+import { verificationLinkEmailHtml } from '@/components/emails/verification-link-email'
+import { sendEmail } from '@/lib/mail'
 
 export const login = async (input: TLoginInput) => {
     const validatedData = LoginSchema.safeParse(input)
@@ -26,6 +28,13 @@ export const login = async (input: TLoginInput) => {
 
     if (!existingUser.emailVerified) {
         const verificationToken = await generateVerificationToken(existingUser.email)
+        const link = `http://localhost:3000/auth/new-verification?token=${verificationToken.token}`
+       
+        await sendEmail({
+            to: process.env.TEST_EMAIL_ADDRESS!,
+            subject: 'verify your email',
+            body: verificationLinkEmailHtml(link)
+        })
 
         return {success: true, message: 'Confirmation email sent'}
     }

@@ -1,9 +1,8 @@
 import { auth, signOut } from "@/auth"
-import { SendTestingEmailBtn } from "@/components/email/send-test-email-btn"
 
 export default async function Settings() {
     const session = await auth()
-    
+
     const handleSignOut = async () => {
         "use server"
         
@@ -16,7 +15,6 @@ export default async function Settings() {
             <form action={handleSignOut}>
                 <button type='submit'>out</button>
             </form>
-            <SendTestingEmailBtn />
         </div>
     )
 }
