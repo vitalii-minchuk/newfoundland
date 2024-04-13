@@ -6,7 +6,7 @@ import { prismaDB } from "@/lib/db"
 
 export const newVerification = async (token?: string) => {
     const existingToken = await getVerificationTokenByToken(token)
-console.log(token)
+
     if (!existingToken) {
         return {error: 'Token does not exist!'}
     }
@@ -23,8 +23,7 @@ console.log(token)
         return {error: 'User with provided email not found!'}
     }
 
-    await prismaDB.$transaction([
-        prismaDB.user.update({
+        await prismaDB.user.update({
             where: {
                 id: existingUser.id
             },
@@ -33,12 +32,12 @@ console.log(token)
                 email: existingToken.email
             }
         }),
-        prismaDB.verificationToken.delete({
+
+        await prismaDB.verificationToken.delete({
             where: {
                 id: existingToken.id
             }
         })
-    ])
 
     return {success: 'Email has been verified!'}
 
