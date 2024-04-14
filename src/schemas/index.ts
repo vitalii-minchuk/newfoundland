@@ -5,6 +5,10 @@ export const LoginSchema = zod.object({
     password: zod.string().min(1, {message: 'Password is required'})
 })
 
+export const ResetSchema = zod.object({
+    email: zod.string().email({message: 'Email is required'})
+})
+
 export const RegisterSchema = zod.object({
     email: zod.string().email({message: 'Email is required'}),
     password: zod.string().min(1, {message: 'Password is required'}),
@@ -13,3 +17,4 @@ export const RegisterSchema = zod.object({
 
 export type TLoginInput = zod.infer<typeof LoginSchema>
 export type TRegisterInput = zod.infer<typeof RegisterSchema>
+export type TResetInput = zod.infer<typeof ResetSchema>
