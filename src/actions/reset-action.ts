@@ -1,10 +1,6 @@
 "use server"
 
-import { signIn } from '@/auth'
-import { AuthError } from 'next-auth'
-
 import { ResetSchema, TResetInput } from "@/schemas"
-import { DEFAULT_LOGIN_REDIRECT } from '@/routes'
 import { getUserByEmail } from '@/helpers/user'
 import { generateVerificationToken } from '@/helpers/verification-token'
 import { verificationLinkEmailHtml } from '@/components/emails/verification-link-email'
