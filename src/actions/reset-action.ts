@@ -2,9 +2,9 @@
 
 import { ResetSchema, TResetInput } from "@/schemas"
 import { getUserByEmail } from '@/helpers/user'
-import { generateVerificationToken } from '@/helpers/verification-token'
-import { verificationLinkEmailHtml } from '@/components/emails/verification-link-email'
 import { sendEmail } from '@/lib/mail'
+import { generatePasswordResetToken } from "@/helpers/password-reset-token"
+import { resetPasswordLinkEmailHtml } from "@/components/emails/reset-link-email"
 
 export const reset = async (input: TResetInput) => {
     const validatedData = ResetSchema.safeParse(input)
@@ -17,22 +17,18 @@ export const reset = async (input: TResetInput) => {
 
     const existingUser = await getUserByEmail(email)
 
-    if (!existingUser || !existingUser?.email || !existingUser.password) {
+    if (!existingUser) {
         return {error: true, message: 'Email does not exist!'}
     }
 
-    if (!existingUser.emailVerified) {
-        const verificationToken = await generateVerificationToken(existingUser.email)
-        const link = `http://localhost:3000/auth/new-verification?token=${verificationToken.token}`
+        const passwordResetToken = await generatePasswordResetToken(email)
+        const link = `http://localhost:3000/auth/new-password?token=${passwordResetToken.token}`
        
         await sendEmail({
             to: process.env.TEST_EMAIL_ADDRESS!,
             subject: 'verify your email',
-            body: verificationLinkEmailHtml(link)
+            body: resetPasswordLinkEmailHtml(link)
         })
 
-        return {success: true, message: 'Confirmation email sent'}
-    }
-
-    return {success: true, message: 'Logged in'}
+    return {success: true, message: 'Reset email sent'}
 }
