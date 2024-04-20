@@ -18,7 +18,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { FormError } from '@/components/auth/form-error'
 import { FormSuccess } from '@/components/auth/form-success'
-import { login } from '@/actions/login-action'
+import { reset } from '@/actions/reset-action'
 
 export const ResetForm = () => {
     const [success, setSuccess] = useState(false)
@@ -43,7 +43,7 @@ export const ResetForm = () => {
         resetState()
         
         startTransition(async () => {
-            // const res = await login(data)
+            const res = await reset(data)
 
             if (res?.error) setError(true)
             if (res?.success) setSuccess(true)
